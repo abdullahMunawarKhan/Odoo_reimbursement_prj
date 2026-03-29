@@ -1,53 +1,185 @@
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
-require('dotenv').config();
+const Company = require('../models/companyModel');
+const Whitelist = require('../models/whitelistModel');
+const { hashPassword, comparePassword } = require('../utils/authUtils');
+const pool = require('../config/db');
 
-const signup = async (req, res) => {
+exports.signup = async (req, res) => {
+    // Admin signup
+    const { name, email, password, company_name } = req.body;
+
+    if (!name || !email || !password || !company_name) {
+        return res.status(400).json({ error: 'Please provide all required fields' });
+    }
+
+    const client = await pool.pool.connect();
     try {
-        const { name, email, password, role, company_id } = req.body;
+        await client.query('BEGIN');
 
-        // Check user existence
-        const userExists = await User.findByEmail(email);
-        if (userExists) return res.status(400).json({ error: "User already exists!" });
+        // Check if user already exists
+        const existingUser = await User.findByEmail(email);
+        if (existingUser) {
+            await client.query('ROLLBACK');
+            return res.status(400).json({ error: 'User already exists' });
+        }
 
-        // Hash password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        // 1. Create company
+        const companyRes = await client.query('INSERT INTO companies (name) VALUES ($1) RETURNING *', [company_name]);
+        const company = companyRes.rows[0];
 
-        // Create user
-        const newUser = await User.create({ name, email, password: hashedPassword, role, company_id });
+        // 2. Hash password
+        const hashedPassword = await hashPassword(password);
 
-        // Generate JWT
-        const token = jwt.sign({ id: newUser.id, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        // 3. Create admin user
+        const userRes = await client.query(
+            `INSERT INTO users (name, email, password, role, company_id) 
+            VALUES ($1, $2, $3, $4, $5) RETURNING id, name, email, role, company_id`,
+            [name, email, hashedPassword, 'admin', company.id]
+        );
+        const user = userRes.rows[0];
 
-        res.status(201).json({ token, user: newUser });
+        // 4. Add admin entry into auth_whitelist
+        await client.query(
+            `INSERT INTO auth_whitelist (name, email, role, company_id, status) 
+            VALUES ($1, $2, $3, $4, $5)`,
+            [name, email, 'admin', company.id, 'active']
+        );
+
+        await client.query('COMMIT');
+
+        // 5. Return JWT token
+        const token = jwt.sign(
+            { user_id: user.id, role: user.role, company_id: user.company_id },
+            process.env.JWT_SECRET,
+            { expiresIn: '1d' }
+        );
+
+        res.status(201).json({ message: 'Admin account created successfully', token, user });
     } catch (err) {
+        await client.query('ROLLBACK');
         console.error(err);
-        res.status(500).json({ error: "Server Error!" });
+        res.status(500).json({ error: 'Server error during signup: ' + err.message });
+    } finally {
+        client.release();
     }
 };
 
-const login = async (req, res) => {
+exports.userSignup = async (req, res) => {
+    // Employee / Manager signup
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+        return res.status(400).json({ error: 'Please provide all required fields' });
+    }
+
+    const client = await pool.pool.connect();
     try {
-        const { email, password } = req.body;
+        await client.query('BEGIN');
 
+        // 1. Check if email exists in auth_whitelist
+        const whitelistEntryRes = await client.query('SELECT * FROM auth_whitelist WHERE email = $1', [email]);
+        const whitelistEntry = whitelistEntryRes.rows[0];
+
+        if (!whitelistEntry) {
+            await client.query('ROLLBACK');
+            return res.status(403).json({ error: 'Not authorized, contact admin. You are not invited.' });
+        }
+
+        if (whitelistEntry.status === 'active') {
+             const existingUser = await User.findByEmail(email);
+             if (existingUser) {
+                 await client.query('ROLLBACK');
+                 return res.status(400).json({ error: 'Account already registered.' });
+             }
+        }
+
+        // 2. Hash password
+        const hashedPassword = await hashPassword(password);
+
+        // 3. Create user in users table
+        const userQuery = `
+            INSERT INTO users (name, email, password, role, company_id) 
+            VALUES ($1, $2, $3, $4, $5) 
+            RETURNING id, name, email, role, company_id
+        `;
+        const userRes = await client.query(userQuery, [
+            name, email, hashedPassword, whitelistEntry.role, whitelistEntry.company_id
+        ]);
+        const user = userRes.rows[0];
+
+        // 4. Update whitelist status
+        await client.query('UPDATE auth_whitelist SET status = $1 WHERE email = $2', ['active', email]);
+
+        await client.query('COMMIT');
+
+        // 5. Return JWT
+        const token = jwt.sign(
+            { user_id: user.id, role: user.role, company_id: user.company_id },
+            process.env.JWT_SECRET,
+            { expiresIn: '1d' }
+        );
+
+        res.status(201).json({ message: 'User account created successfully', token, user });
+    } catch (err) {
+        await client.query('ROLLBACK');
+        console.error(err);
+        res.status(500).json({ error: 'Server error during user signup' });
+    } finally {
+        client.release();
+    }
+};
+
+exports.login = async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Please provide email and password' });
+    }
+
+    try {
+        // 1. Check user exists
         const user = await User.findByEmail(email);
-        if (!user) return res.status(400).json({ error: "Invalid Credentials!" });
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid email or password' });
+        }
 
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ error: "Invalid Credentials!" });
+        if (!user.is_active) {
+            return res.status(403).json({ error: 'Account is deactivated' });
+        }
 
-        const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        // 2. Validate password
+        const isMatch = await comparePassword(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Invalid email or password' });
+        }
 
-        res.json({
+        // 3. Check whitelist active
+        const whitelistEntry = await Whitelist.findByEmail(email);
+        if (!whitelistEntry || whitelistEntry.status !== 'active') {
+             return res.status(403).json({ error: 'Account setup incomplete or unauthorized' });
+        }
+
+        // 4. Return JWT
+        const token = jwt.sign(
+            { user_id: user.id, role: user.role, company_id: user.company_id },
+            process.env.JWT_SECRET,
+            { expiresIn: '1d' }
+        );
+
+        res.status(200).json({
+            message: 'Logged in successfully',
             token,
-            user: { id: user.id, name: user.name, email: user.email, role: user.role, company_id: user.company_id }
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                company_id: user.company_id
+            }
         });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Server Error!" });
+        res.status(500).json({ error: 'Server error during login' });
     }
 };
-
-module.exports = { signup, login };

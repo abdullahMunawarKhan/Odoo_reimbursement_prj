@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { authMiddleware } = require('../middlewares/authMiddleware');
+const { authenticateToken } = require('../middlewares/authMiddleware');
 const { submitExpense, getExpenses } = require('../controllers/expenseController');
 
-router.post('/submit', authMiddleware, submitExpense);
-router.get('/', authMiddleware, getExpenses);
+router.post('/submit', authenticateToken, submitExpense);
+router.get('/', authenticateToken, getExpenses);
 
 module.exports = router;

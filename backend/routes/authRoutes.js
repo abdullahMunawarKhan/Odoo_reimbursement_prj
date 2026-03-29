@@ -1,8 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { signup, login } = require('../controllers/authController');
+const authController = require('../controllers/authController');
 
-router.post('/signup', signup);
-router.post('/login', login);
+// Admin Signup (Initial company creation)
+router.post('/signup', authController.signup);
+
+// Employee/Manager Signup (Requires active whitelist)
+router.post('/user-signup', authController.userSignup);
+
+// Universal Login
+router.post('/login', authController.login);
 
 module.exports = router;
