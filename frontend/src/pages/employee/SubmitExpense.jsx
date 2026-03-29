@@ -32,23 +32,23 @@ const SubmitExpense = () => {
 
     return (
         <div className="max-w-4xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom duration-1000 pb-20 pt-10">
-            <header className="text-center">
-                <h1 className="text-6xl font-black text-white mb-6 uppercase tracking-tighter decoration-emerald-500/20 underline decoration-[12px] underline-offset-8">Submit Expense</h1>
-                <p className="text-slate-500 text-xl font-medium tracking-tight">Convert your receipts into reimbursements instantly</p>
+            <header className="text-center mb-10">
+                <h1 className="text-3xl font-black text-slate-900 mb-2 uppercase tracking-tight">Submit Expense</h1>
+                <p className="text-slate-600 text-base font-medium tracking-tight">Convert your receipts into reimbursements instantly</p>
             </header>
 
             <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 {/* Receipt Upload Section */}
                 <div className="space-y-6">
-                    <label className="block text-2xl font-black mb-4 text-emerald-400 flex items-center gap-3">
-                        <Upload size={24} /> Step 1: Upload
+                    <label className="block text-xl font-black mb-4 text-emerald-600 flex items-center gap-2">
+                        <Upload size={20} /> Step 1: Upload
                     </label>
-                    <div className="relative group cursor-pointer border-4 border-dashed border-slate-800 bg-slate-900/50 rounded-[3rem] p-12 flex flex-col items-center justify-center hover:bg-slate-900 hover:border-emerald-500/30 transition-all duration-700 overflow-hidden shadow-2xl">
-                        <div className="p-6 bg-slate-950 rounded-[2rem] border border-white/5 mb-6 group-hover:scale-110 group-hover:rotate-[360deg] transition duration-1000">
-                            <Upload className="text-emerald-500" size={48} />
+                    <div className="relative group cursor-pointer border-4 border-dashed border-slate-100 bg-white rounded-[2rem] p-10 flex flex-col items-center justify-center hover:bg-slate-50 hover:border-emerald-500/30 transition-all duration-700 shadow-lg">
+                        <div className="p-4 bg-slate-50 rounded-[1.2rem] border border-slate-200 mb-4 group-hover:scale-110 transition duration-700">
+                            <Upload className="text-emerald-500" size={36} />
                         </div>
-                        <p className="text-white font-black text-xl mb-1 tracking-tight">Tap to upload receipt</p>
-                        <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">PNG, JPG or PDF • 5MB Limit</p>
+                        <p className="text-slate-900 font-extrabold text-lg mb-1 tracking-tight">Tap to upload receipt</p>
+                        <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">PNG, JPG or PDF • 5MB Limit</p>
                         <input
                             type="file"
                             className="absolute inset-0 opacity-0 cursor-pointer"
@@ -65,16 +65,16 @@ const SubmitExpense = () => {
                     </div>
                     {/* Simulated OCR result if file uploaded */}
                     {file && (
-                        <div className="p-10 bg-slate-900/50 border border-white/5 rounded-[2.5rem] animate-in slide-in-from-left duration-1000 shadow-3xl">
-                            <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-6">AI Receipt Parser (BETA)</h3>
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-center bg-slate-950 p-6 rounded-2xl border border-white/5">
-                                    <span className="text-slate-500 font-bold uppercase text-[10px] tracking-widest">Merchant</span>
-                                    <span className="text-white font-black text-lg">Starbucks London</span>
+                        <div className="p-8 bg-white border border-slate-100 rounded-[2rem] animate-in slide-in-from-left duration-1000 shadow-md">
+                            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">AI Receipt Parser (BETA)</h3>
+                            <div className="space-y-3">
+                                <div className="flex justify-between items-center bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                    <span className="text-slate-500 font-bold uppercase text-[9px] tracking-widest">Merchant</span>
+                                    <span className="text-slate-900 font-extrabold text-base">Starbucks London</span>
                                 </div>
-                                <div className="flex justify-between items-center bg-slate-950 p-6 rounded-2xl border border-white/5">
-                                    <span className="text-slate-500 font-bold uppercase text-[10px] tracking-widest">Total Found</span>
-                                    <span className="text-amber-500 font-black text-2xl tracking-tighter">$14.25</span>
+                                <div className="flex justify-between items-center bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                    <span className="text-slate-500 font-bold uppercase text-[9px] tracking-widest">Total Found</span>
+                                    <span className="text-emerald-600 font-black text-xl tracking-tighter">$14.25</span>
                                 </div>
                             </div>
                         </div>
@@ -83,16 +83,16 @@ const SubmitExpense = () => {
 
                 {/* Form Details Section */}
                 <div className="space-y-8">
-                    <label className="block text-2xl font-black mb-4 text-blue-400 flex items-center gap-3">
-                        <FileText size={24} /> Step 2: Information
+                    <label className="block text-xl font-black mb-4 text-blue-600 flex items-center gap-2">
+                        <FileText size={20} /> Step 2: Information
                     </label>
 
-                    <div className="space-y-8 bg-slate-900/50 p-10 rounded-[3rem] border border-white/5 backdrop-blur-3xl shadow-3xl">
+                    <div className="space-y-6 bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-xl">
                         <div>
                             <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] block mb-4 px-1">Expense Category</label>
                             <div className="relative group">
                                 <select
-                                    className="w-full bg-slate-950 border border-slate-800 text-white rounded-[1.5rem] p-5 focus:ring-4 focus:ring-blue-500/20 outline-none transition duration-500 font-black appearance-none"
+                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl p-4 focus:ring-4 focus:ring-blue-500/10 outline-none transition duration-500 font-bold appearance-none"
                                     value={category}
                                     onChange={(e) => setCategory(e.target.value)}
                                 >
@@ -117,13 +117,16 @@ const SubmitExpense = () => {
                                     icon={DollarSign}
                                     value={amount}
                                     onChange={(e) => setAmount(e.target.value)}
+                                    min="0.01"
+                                    step="0.01"
+                                    required
                                 />
                             </div>
                             <div>
                                 <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] block mb-4 px-1">Currency</label>
                                 <div className="relative group">
                                     <select
-                                        className="w-full bg-slate-950 border border-slate-800 text-white rounded-[1.5rem] p-5 focus:ring-4 focus:ring-blue-500/20 outline-none transition duration-500 font-black appearance-none"
+                                        className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl p-4 focus:ring-4 focus:ring-blue-500/10 outline-none transition duration-500 font-bold appearance-none"
                                         value={currency}
                                         onChange={(e) => setCurrency(e.target.value)}
                                     >
@@ -148,7 +151,7 @@ const SubmitExpense = () => {
                              <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] block mb-2 px-1">Description / Proof</label>
                              <textarea
                                 placeholder="What was this expense for?"
-                                className="w-full bg-slate-950 border border-slate-800 text-white rounded-[1.5rem] p-6 min-h-[160px] focus:ring-4 focus:ring-blue-500/20 outline-none transition duration-500 resize-none font-medium"
+                                className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl p-5 min-h-[120px] focus:ring-4 focus:ring-blue-500/10 outline-none transition duration-500 resize-none font-medium text-sm"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                              ></textarea>
@@ -158,7 +161,7 @@ const SubmitExpense = () => {
                     <Button
                         type="submit"
                         variant="primary"
-                        className="w-full py-6 text-2xl font-black uppercase tracking-tighter"
+                        className="w-full py-4 text-lg font-black uppercase tracking-tight shadow-xl shadow-blue-500/20"
                         disabled={loading}
                     >
                         {loading ? "Vaulting Receipts..." : (

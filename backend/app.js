@@ -12,6 +12,7 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/expenses', require('./routes/expenseRoutes'));
+app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 // app.use('/api/approvals', require('./routes/approvalRoutes'));
 
 app.get('/', (req, res) => {

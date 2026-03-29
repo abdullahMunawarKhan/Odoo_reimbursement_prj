@@ -3,10 +3,12 @@ services:
     image: postgres:15   # ✅ FIXED VERSION (important)
     container_name: postgres_db
     restart: always
+    env_file:
+      - ./backend/.env
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mysecurepassword
-      POSTGRES_DB: mydb
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-mydb}
     ports:
       - "5433:5432"
     volumes:

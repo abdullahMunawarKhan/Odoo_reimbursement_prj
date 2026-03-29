@@ -64,21 +64,10 @@ const AuthLayout = () => {
                 </div>
             </div>
 
-<<<<<<< HEAD
-            {/* Right Side: Form Content Area */}
-            <div className="w-full lg:w-7/12 xl:w-1/2 flex items-center justify-center p-6 sm:p-12 relative overflow-hidden min-h-screen">
-                {/* Mobile Background Elements (hidden on large screens to avoid clashing) */}
-                <div className="absolute top-20 right-[-20%] w-96 h-96 bg-emerald-500/10 rounded-full blur-[100px] lg:hidden"></div>
-                <div className="absolute bottom-[-10%] left-[-20%] w-80 h-80 bg-blue-500/10 rounded-full blur-[100px] lg:hidden"></div>
-                
-                <div className="w-full max-w-md z-10 animate-in fade-in slide-in-from-bottom-8 duration-700 pb-12">
-                    {/* Mobile Logo Only */}
-=======
             {/* Right Side: Form */}
             <div className="w-full lg:w-7/12 xl:w-1/2 flex items-center justify-center p-6 sm:p-12 h-screen overflow-y-auto">
                 <div className="w-full max-w-md z-10 pb-8">
                     {/* Mobile Logo */}
->>>>>>> eb5776036fcf638add3e6b393a414f6cc5477775
                     <div className="lg:hidden flex justify-center mb-8">
                         <div className="flex items-center gap-2">
                             <div className="w-8 h-8 bg-[#4F46E5] rounded-lg flex items-center justify-center">
