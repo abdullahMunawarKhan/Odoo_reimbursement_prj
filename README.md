@@ -1,63 +1,130 @@
-# 🚀 Reimbursement Management System
+# 🚀 Reimbursement Management System (Odoo-inspired)
 
-A robust and transparent solution for managing manual expense reimbursement processes. This project aims to simplify approval flows, multi-level management, and flexible approval rules.
+[![React](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-blue?style=for-the-badge&logo=react)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Backend-Node.js%20%2B%20Express-green?style=for-the-badge&logo=nodedotjs)](https://nodejs.org/)
+[![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue?style=for-the-badge&logo=postgresql)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Container-Docker-blue?style=for-the-badge&logo=docker)](https://www.docker.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind%20CSS%204-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 
----
-
-## 📝 Problem Statement
-Companies often struggle with **manual expense reimbursement processes** that are time-consuming, error-prone, and lack transparency. There is a need for a system that can:
-- Define **approval flows** based on thresholds.
-- Manage **multi-level approvals**.
-- Support **flexible approval rules**.
+A premium, full-stack enterprise solution for managing manual expense reimbursement processes. Designed with high-performance React patterns and a robust Node.js/PostgreSQL architecture.
 
 ---
 
-## ✨ Core Features
+## 🎥 Project Overview
+This system simplifies approval flows, multi-level management, and complex business logic for employee reimbursements. It features a unique, high-end dark-themed UI with role-specific dashboards.
 
-### 👤 Authentication & User Management
-- **One-Click Setup**: On first login/signup, a new Company (with the environment's selected country's currency) and Admin User are auto-created.
-- **Role Management**: Admin can create Employees & Managers, assign/change roles, and define manager relationships for employees.
-
-### 💰 Expense Submission (Employee Role)
-- **Claim Submission**: Employees can submit claims with details like Amount (supports different currencies), Category, Description, and Date.
-- **History Tracking**: Employees can view their complete expense history with status indicators (Approved, Rejected).
-
-### 🪜 Approval Workflow (Manager/Admin Role)
-- **Hierarchical Approval**: Expenses are first approved by the direct manager if the `IS MANAGER APPROVER` field is checked.
-- **Custom Sequences**: Admin can define multi-step sequences (e.g., Step 1: Manager ➡️ Step 2: Finance ➡️ Step 3: Director).
-- **Transparency**: Expenses move to the next approver only after the current one acts.
-
-### ⚙️ Conditional Approval Flow
-The system supports complex approval logic:
-- **Percentage Rule**: e.g., If 60% of approvers approve, the expense is approved.
-- **Specific Approver Rule**: e.g., If CFO approves, the expense is auto-approved.
-- **Hybrid Rule**: Combine rules (e.g., 60% OR CFO approves).
+### 🎭 3-Role Ecosystem
+The interface dynamically morphs based on your organizational role:
+- **👤 Employee**: Submit receipts, track status, and view personal history.
+- **👨💼 Manager**: Review pending approvals, analyze team spending, and add decision comments.
+- **🛡️ Admin**: Manage global identity, configure workflow rules, and audit all expenditures.
 
 ---
 
-## 🔐 Roles & Permissions
+## ✨ Implemented Core Features
 
-| Role | Permissions |
-| :--- | :--- |
-| **Admin** | Create company, manage users, set roles, configure rules, view all expenses, override approvals |
-| **Manager** | Approve/reject expenses, view team expenses, escalate as per rules |
-| **Employee** | Submit expenses, view own expense history, check approval status |
+### 🔐 1. Smart Authentication & RBAC
+- **JWT-Based Security**: Encrypted session management.
+- **Role-Based Access Control (RBAC)**: Strict route protection—Admins can't be spoofed by Employees.
+- **Dynamic Redirection**: Immediate routing to role-specific control centers upon login.
+
+### 💰 2. Smart Expense Submissions (Employee)
+- **OCR-Ready Uploads**: High-end receipt drop-zones with simulated AI parsing.
+- **Multi-Currency Support**: Selective currency inputs for global teams.
+- **Real-Time Tracking**: Visual status indicators (Draft ➡️ Pending ➡️ Approved/Rejected).
+
+### 🪜 3. Approval Engine (Manager)
+- **Decision Hub**: One-click Approve/Reject interface.
+- **Team Analytics**: Performance and compliance tracking.
+- **Global Converted View**: Managers see original values vs base currency estimates.
+
+### ⚙️ 4. Identity & Rules (Admin)
+- **Identity Hub**: Full CRUD for users with role assignment.
+- **Workflow Rules**: Define approval sequences (Percentage-based, Hybrid, or Specific approvers).
+- **Global Audit**: Complete transparency over all organizational spending.
 
 ---
 
-## 🛠️ Additional Features
-- **📸 OCR for Receipts**: Automatically read and populate expense fields (Amount, Date, Description, Expense Type, Restaurant Name) by scanning receipts.
-- **🌍 Global Support**:
-  - Integration with [REST Countries API](https://restcountries.com/v3.1/all?fields=name,currencies) for country/currency data.
-  - Integration with [Exchange Rate API](https://api.exchangerate-api.com/v4/latest/{BASE_CURRENCY}) for real-time currency conversions.
+## 🛠️ Tech Stack & Architecture
+
+### Frontend (Modern React)
+- **Framework**: Vite + React 19
+- **Styling**: Tailwind CSS 4 (Premium HSL palette)
+- **Icons**: Lucide React
+- **Navigation**: React Router 7 (Complex nesting & Layouts)
+- **State**: React Context API (AuthStore)
+- **API**: Axios with Interceptors
+
+### Backend (Robust Node)
+- **Engine**: Express.js
+- **Auth**: JSON Web Tokens (JWT) & Bcrypt
+- **Validation**: Zod
+- **Database**: PostgreSQL 15 (Docker)
+- **Driver**: `pg` (Pool-based connections)
 
 ---
 
-## 🎨 Design & Mockups
-You can view the project mockups here:
-👉 [Excalidraw Mockup](https://link.excalidraw.com/l/65VNwvy7c4X/4WSLZDTrhkA)
+## 📁 Repository Structure
+```bash
+/
+├── backend/                # Express.js Server
+│   ├── config/             # DB Connectivity
+│   ├── controllers/        # API Business Logic
+│   ├── middlewares/        # JWT & RBAC protection
+│   ├── models/             # SQL Query Layer
+│   ├── routes/             # REST Endpoints
+│   └── server.js           # Entry Point
+│
+├── frontend/               # React (Vite) Client
+│   ├── src/
+│   │   ├── components/     # UI Kit & Common Layouts
+│   │   ├── pages/          # Admin, Manager, Employee-specific views
+│   │   ├── services/       # Consolidated API layer
+│   │   ├── store/          # Auth Context (Global State)
+│   │   └── App.jsx         # Routing & Protection Logic
+│
+├── docker-compose.yml      # DB Orchestration
+└── db.sql                  # Initial Database Schema
+```
 
 ---
 
 ## 🚀 Getting Started
-(Instructions for installation and local setup can be added here once the codebase is initialized.)
+
+### 1. Prerequisites
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
+- [Node.js](https://nodejs.org/) (v18+) installed.
+
+### 2. Database Setup
+Spin up the PostgreSQL container:
+```bash
+docker-compose up -d
+```
+*Note: The schema is automatically applied on first run.*
+
+### 3. Backend Setup
+```bash
+cd backend
+npm install
+npm run dev
+```
+*Server runs on: [http://localhost:5000](http://localhost:5000)*
+
+### 4. Frontend Setup
+```bash
+cd frontend
+npm install
+npm run dev
+```
+*App runs on: [http://localhost:5173](http://localhost:5173)*
+
+---
+
+## 🎨 Design Vision
+The application uses a **Slate-950 base** with **Blue-500/Emerald-500 accents**, focusing on maximalist typography and high-contrast dashboard elements to ensure clarity for financial auditors.
+
+---
+
+## 🤝 Contribution
+This project was built as a solution for complex reimbursement workflows.
+Developed by [Your Name/Team]
