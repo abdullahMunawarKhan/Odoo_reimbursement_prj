@@ -6,6 +6,7 @@ import RoleBasedRoute from './components/RoleBasedRoute';
 import { ROLES } from './constants/roles';
 
 // Pages
+import Home from './pages/Home';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 import EmployeeDashboard from './pages/employee/Dashboard';
@@ -17,12 +18,17 @@ import Approvals from './pages/manager/Approvals';
 import AdminRules from './pages/admin/ApprovalRules';
 import ManageUsers from './pages/admin/ManageUsers';
 import AllExpenses from './pages/admin/AllExpenses';
+import TermsOfService from './pages/legal/SiteTerms';
+import PrivacyPolicy from './pages/legal/SitePrivacy';
 
 function App() {
   return (
     <AuthProvider>
       <Router>
         <Routes>
+          {/* Landing Page */}
+          <Route path="/" element={<Home />} />
+
           {/* Public / Auth Routes */}
           <Route path="/auth" element={<AuthLayout />}>
             <Route path="login" element={<Login />} />
@@ -60,8 +66,11 @@ function App() {
              </Route>
           </Route>
 
+          {/* Legal Routes */}
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+
           {/* Fallback */}
-          <Route path="/" element={<Navigate to="/auth/login" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
