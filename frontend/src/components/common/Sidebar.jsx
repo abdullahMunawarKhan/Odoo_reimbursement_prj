@@ -1,66 +1,74 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, FilePlus, CheckSquare, Settings, LayoutDashboard, Database, TrendingUp, Users, ShieldAlert, History } from 'lucide-react';
+import { CheckSquare, Settings, LayoutDashboard, Database, FilePlus, Users, ShieldAlert, History } from 'lucide-react';
 import { ROLES } from '../../constants/roles';
 
 const Sidebar = ({ userRole }) => {
     const location = useLocation();
 
     const menuItems = [
-        { label: 'Overview', icon: <LayoutDashboard size={20} />, path: `/${userRole}/dashboard` },
+        { label: 'Overview', icon: <LayoutDashboard size={18} />, path: `/${userRole}/dashboard` },
     ];
 
     if (userRole === ROLES.EMPLOYEE) {
         menuItems.push(
-            { label: 'Submit Ticket', icon: <FilePlus size={20} />, path: '/employee/submit-expense' },
-            { label: 'My Submissions', icon: <History size={20} />, path: '/employee/my-expenses' }
+            { label: 'Submit Expense', icon: <FilePlus size={18} />, path: '/employee/submit-expense' },
+            { label: 'My Submissions', icon: <History size={18} />, path: '/employee/my-expenses' }
         );
     }
 
     if (userRole === ROLES.MANAGER || userRole === ROLES.ADMIN) {
         menuItems.push(
-            { label: 'Review Pending', icon: <CheckSquare size={20} />, path: '/manager/approvals' }
+            { label: 'Review Pending', icon: <CheckSquare size={18} />, path: '/manager/approvals' }
         );
     }
 
     if (userRole === ROLES.ADMIN) {
         menuItems.push(
-            { label: 'Global Audit', icon: <ShieldAlert size={20} />, path: '/admin/all-expenses' },
-            { label: 'Identity Hub', icon: <Users size={20} />, path: '/admin/manage-users' },
-            { label: 'Workflow Rules', icon: <Database size={20} />, path: '/admin/manage-rules' }
+            { label: 'Global Audit', icon: <ShieldAlert size={18} />, path: '/admin/all-expenses' },
+            { label: 'Manage Users', icon: <Users size={18} />, path: '/admin/manage-users' },
+            { label: 'Approval Rules', icon: <Database size={18} />, path: '/admin/manage-rules' }
         );
     }
 
     return (
-        <aside className="w-85 bg-slate-900 border-r border-slate-800 h-[calc(100vh-80px)] sticky top-[80px] hidden lg:flex flex-col overflow-y-auto p-8 space-y-16">
-            <div className="space-y-4">
-                <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mb-6 px-4">Navigation</p>
-                {menuItems.map((item) => (
-                    <Link
-                        key={item.path}
-                        to={item.path}
-                        className={`flex items-center gap-5 px-6 py-5 rounded-[2rem] transition-all duration-500 font-black tracking-tight group ${
-                            location.pathname === item.path
-                                ? 'bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-2xl shadow-blue-500/30'
-                                : 'text-slate-500 hover:bg-slate-800/50 hover:text-white border border-transparent'
-                        }`}
-                    >
-                        <div className={`transition duration-700 ${location.pathname === item.path ? 'scale-110 rotate-6' : 'group-hover:scale-110 group-hover:-rotate-6'}`}>
-                            {item.icon}
-                        </div>
-                        <span className="text-[13px] uppercase tracking-widest">{item.label}</span>
-                    </Link>
-                ))}
+        <aside className="w-64 bg-white border-r border-[#E5E7EB] h-[calc(100vh-57px)] sticky top-[57px] hidden lg:flex flex-col overflow-y-auto py-6">
+            {/* Navigation Group */}
+            <div className="px-3 mb-2">
+                <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-[0.2em] px-3 mb-2">Navigation</p>
+                <nav className="space-y-1">
+                    {menuItems.map((item) => {
+                        const isActive = location.pathname === item.path;
+                        return (
+                            <Link
+                                key={item.path}
+                                to={item.path}
+                                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm group ${
+                                    isActive
+                                        ? 'bg-indigo-50 text-[#4F46E5]'
+                                        : 'text-[#6B7280] hover:bg-[#F9FAFB] hover:text-[#111827]'
+                                }`}
+                            >
+                                <div className={`transition-colors duration-200 ${isActive ? 'text-[#4F46E5]' : 'text-[#9CA3AF] group-hover:text-[#6B7280]'}`}>
+                                    {item.icon}
+                                </div>
+                                <span>{item.label}</span>
+                                {isActive && (
+                                    <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#4F46E5]"></div>
+                                )}
+                            </Link>
+                        );
+                    })}
+                </nav>
             </div>
 
-            <div className="mt-auto pt-10 border-t border-white/5">
-                <div className="bg-slate-950 p-8 rounded-[2.5rem] space-y-4 border border-white/5 relative group cursor-pointer overflow-hidden">
-                    <div className="relative z-10">
-                        <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] mb-2">Sync Status</p>
-                        <div className="flex items-center gap-2">
-                             <div className="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></div>
-                             <p className="text-sm font-black text-white">Cloud Synced</p>
-                        </div>
+            {/* Bottom Status Panel */}
+            <div className="mt-auto px-3">
+                <div className="bg-indigo-50 border border-indigo-100 p-4 rounded-xl">
+                    <div className="flex items-center gap-2 mb-1">
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></div>
+                        <p className="text-xs font-bold text-[#111827]">System Online</p>
                     </div>
+                    <p className="text-[11px] text-[#6B7280]">All services running normally</p>
                 </div>
             </div>
         </aside>

@@ -3,11 +3,11 @@ import React from 'react';
 const Input = ({ label, type = "text", placeholder, value, onChange, error, className = "", icon: Icon, trailingIcon: TrailingIcon, onTrailingIconClick, ...props }) => {
     return (
         <div className={`mb-4 w-full ${className}`}>
-            {label && <label className="block text-sm font-bold text-slate-500 uppercase tracking-widest mb-2 px-1">{label}</label>}
+            {label && <label className="block text-xs font-bold text-[#6B7280] uppercase tracking-widest mb-1.5 px-0.5">{label}</label>}
             <div className="relative group flex items-center">
                 {Icon && (
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors z-10">
-                        <Icon size={20} />
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF] group-focus-within:text-[#4F46E5] transition-colors z-10">
+                        <Icon size={18} />
                     </div>
                 )}
                 <input
@@ -15,20 +15,20 @@ const Input = ({ label, type = "text", placeholder, value, onChange, error, clas
                     value={value}
                     onChange={onChange}
                     placeholder={placeholder}
-                    className={`bg-slate-900 border ${error ? 'border-rose-500' : 'border-slate-800'} text-white rounded-2xl py-4 ${Icon ? 'pl-12' : 'pl-4'} ${TrailingIcon ? 'pr-12' : 'pr-4'} w-full focus:outline-none focus:ring-2 ${error ? 'focus:ring-rose-500' : 'focus:ring-blue-500'} focus:border-transparent transition-all duration-300 placeholder:text-slate-600 shadow-inner`}
+                    className={`bg-white border ${error ? 'border-red-400' : 'border-[#E5E7EB]'} text-[#111827] rounded-lg py-3 ${Icon ? 'pl-10' : 'pl-3'} ${TrailingIcon ? 'pr-10' : 'pr-3'} w-full focus:outline-none focus:ring-2 ${error ? 'focus:ring-red-300' : 'focus:ring-[#4F46E5]/30'} focus:border-[#4F46E5] transition-all duration-200 placeholder:text-[#D1D5DB] text-sm`}
                     {...props}
                 />
                 {TrailingIcon && (
-                    <button 
+                    <button
                         type="button"
                         onClick={onTrailingIconClick}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors z-10 focus:outline-none"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-[#6B7280] transition-colors z-10 focus:outline-none"
                     >
-                        <TrailingIcon size={20} />
+                        <TrailingIcon size={18} />
                     </button>
                 )}
             </div>
-            {error && <p className="mt-2 text-rose-500 text-sm font-medium animate-pulse">{error}</p>}
+            {error && <p className="mt-1 text-red-500 text-xs font-medium">{error}</p>}
         </div>
     );
 };
