@@ -103,18 +103,18 @@ const Signup = () => {
                     </div>
                 </div>
 
-                <label className="flex items-start gap-2 cursor-pointer group pt-1">
+                <label className="flex items-center gap-2.5 cursor-pointer pt-1 mb-2">
                     <input type="checkbox" checked={agreedToTerms} onChange={(e) => setAgreedToTerms(e.target.checked)}
-                        className="w-4 h-4 mt-0.5 accent-[#4F46E5] rounded border-[#E5E7EB] flex-shrink-0" />
-                    <span className="text-sm text-[#6B7280] leading-relaxed">
+                        className="w-[18px] h-[18px] accent-[#3832D0] cursor-pointer shrink-0 rounded-sm" />
+                    <span className="text-[15px] text-[#5A6376]">
                         I agree to the{' '}
-                        <span className="text-[#4F46E5] font-medium hover:text-[#4338CA] cursor-pointer">Terms of Service</span>
+                        <Link to="/terms" target="_blank" className="text-[#3832D0] hover:underline cursor-pointer">Terms of Service</Link>
                         {' '}and{' '}
-                        <span className="text-[#4F46E5] font-medium hover:text-[#4338CA] cursor-pointer">Privacy Policy</span>.
+                        <Link to="/privacy" target="_blank" className="text-[#3832D0] hover:underline cursor-pointer">Privacy Policy</Link>.
                     </span>
                 </label>
 
-                <Button type="submit" variant="primary" className="w-full py-3 text-base" disabled={loading}>
+                <Button type="submit" variant="primary" className="w-full py-3 text-base" disabled={loading || !agreedToTerms}>
                     {loading ? "Creating..." : <><UserPlus size={16} /> Create Account</>}
                 </Button>
             </form>
