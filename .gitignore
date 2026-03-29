@@ -39,12 +39,5 @@ build/
 out/
 .next/
 
-# Database / SQLite
-*.sql
-!db.sql # Unignore db.sql if it's a schema (but check if it contains actual data first)
-# For now, let's keep it unignored if it's a schema, 
-# but if it contains users or sensitive data it should be ignored.
-# Looking at the file size 1826 bytes it's likely just a schema.
-
 # Docker
 .dockercache

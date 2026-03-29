@@ -6,8 +6,8 @@ const submitExpense = async (req, res) => {
         const userId = req.user.id; // From auth middleware
 
         const result = await pool.query(
-            'INSERT INTO expenses (user_id, amount, currency, category, description, status) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-            [userId, amount, currency, category, description, 'pending']
+            'INSERT INTO expenses (user_id, amount, currency, category, description, status, date) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+            [userId, amount, currency, category, description, 'pending', date]
         );
 
         res.status(201).json(result.rows[0]);

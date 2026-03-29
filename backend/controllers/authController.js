@@ -50,7 +50,7 @@ exports.signup = async (req, res) => {
 
         // 5. Return JWT token
         const token = jwt.sign(
-            { user_id: user.id, role: user.role, company_id: user.company_id },
+            { id: user.id, role: user.role, company_id: user.company_id },
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );
@@ -115,7 +115,7 @@ exports.userSignup = async (req, res) => {
 
         // 5. Return JWT
         const token = jwt.sign(
-            { user_id: user.id, role: user.role, company_id: user.company_id },
+            { id: user.id, role: user.role, company_id: user.company_id },
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );
@@ -162,7 +162,7 @@ exports.login = async (req, res) => {
 
         // 4. Return JWT
         const token = jwt.sign(
-            { user_id: user.id, role: user.role, company_id: user.company_id },
+            { id: user.id, role: user.role, company_id: user.company_id },
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );
